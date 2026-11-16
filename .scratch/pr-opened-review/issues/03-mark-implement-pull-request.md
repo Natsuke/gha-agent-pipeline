@@ -4,8 +4,12 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** claimed
+**Status:** resolved
 
-- [ ] An implement pull request body contains `agent-pr-implement` and the existing agent pull request mark
-- [ ] A yolo pull request body does not contain `agent-pr-implement` and still contains the existing agent pull request mark
-- [ ] Skipping pull request creation writes no implement mark
+- [x] An implement pull request body contains `agent-pr-implement` and the existing agent pull request mark
+- [x] A yolo pull request body does not contain `agent-pr-implement` and still contains the existing agent pull request mark
+- [x] Skipping pull request creation writes no implement mark
+
+## Answer
+
+An implement pull request body includes `<!-- agent-pr-implement -->` and `<!-- agent-pr -->`. A yolo body keeps `<!-- agent-pr -->` only. Both phases return before building a body when pull request creation is skipped. Landed on `feat/pr-opened-review` as `d98e9d3`.
