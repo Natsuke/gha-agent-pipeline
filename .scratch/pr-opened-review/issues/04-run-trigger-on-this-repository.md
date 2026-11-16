@@ -7,7 +7,7 @@
 - 02 — Publish at most one marked PR-opened review
 - 03 — Mark an implement pull request at creation
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] This repository listens for `opened` and `ready_for_review` and calls the reusable gate with a runner input
 - [ ] The gate uses the shared decision, then dispatches the existing phase workflow as a code review with the review loop inactive and chaining off
