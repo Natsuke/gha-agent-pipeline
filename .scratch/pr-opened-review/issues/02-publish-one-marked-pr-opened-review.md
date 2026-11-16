@@ -4,7 +4,7 @@
 
 **Blocked by:** 01 — Decide whether a pull request gets a PR-opened review
 
-**Status:** ready-for-agent
+**Status:** claimed
 
 - [ ] A published PR-opened review body contains both the code review mark and `agent-pr-opened-review`
 - [ ] The fallback publisher writes the same once-only mark when it publishes a PR-opened review

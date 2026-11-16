@@ -4,16 +4,20 @@
 
 **Blocked by:** None (can start immediately).
 
-**Status:** claimed
+**Status:** resolved
 
-- [ ] A reviewable same-repository pull request with no implement mark and no published PR-opened review yields a dispatch payload
-- [ ] The issue number is parsed from `branch_prefix/<id>-` on the head branch, and is the pull request number otherwise
-- [ ] The payload carries the head branch name, not the SHA from the opening event, and the pull request's own base ref
-- [ ] The payload marks the run as a PR-opened review, leaves the review loop inactive, and leaves chaining off
-- [ ] A head branch in another repository is a silent skip
-- [ ] An `opened` draft is a silent skip, and `ready_for_review` is not
-- [ ] A pull request that is closed when the decision runs is a silent skip
-- [ ] A body containing the implement mark `agent-pr-implement` is a silent skip
-- [ ] Any existing review body containing `agent-pr-opened-review` is a silent skip, including a dismissed review
-- [ ] Path filters are not a skip reason
-- [ ] Events other than `opened` and `ready_for_review` are a silent skip
+- [x] A reviewable same-repository pull request with no implement mark and no published PR-opened review yields a dispatch payload
+- [x] The issue number is parsed from `branch_prefix/<id>-` on the head branch, and is the pull request number otherwise
+- [x] The payload carries the head branch name, not the SHA from the opening event, and the pull request's own base ref
+- [x] The payload marks the run as a PR-opened review, leaves the review loop inactive, and leaves chaining off
+- [x] A head branch in another repository is a silent skip
+- [x] An `opened` draft is a silent skip, and `ready_for_review` is not
+- [x] A pull request that is closed when the decision runs is a silent skip
+- [x] A body containing the implement mark `agent-pr-implement` is a silent skip
+- [x] Any existing review body containing `agent-pr-opened-review` is a silent skip, including a dismissed review
+- [x] Path filters are not a skip reason
+- [x] Events other than `opened` and `ready_for_review` are a silent skip
+
+## Answer
+
+`decidePrOpenedReview` in the shared script returns `{ outcome: "silent-skip" }` or a dispatch payload with the issue number, pull request number, head branch, base ref, PR-opened review on, review loop off, and chaining off. A silent skip has no reason and posts no comment. Landed on `feat/pr-opened-review` as `55e6ec6`.
