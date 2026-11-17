@@ -8,7 +8,7 @@
 - 02 — Publish at most one marked PR-opened review
 - 03 — Mark an implement pull request at creation
 
-**Status:** done
+**Status:** resolved
 
 - [x] This repository listens for `opened` and `ready_for_review` and calls the reusable gate with a runner input
 - [x] The gate uses the shared decision, then dispatches the existing phase workflow as a code review with the review loop inactive and chaining off
@@ -18,4 +18,4 @@
 - [x] A skipped pull request produces no comment
 - [x] Dogfood enables the trigger with no new agent-config flag
 
-Dogfood `agent-on-pr-opened.yml` calls `agent-pr-opened-review.yml` with `blacksmith-4vcpu-ubuntu-2404`. The gate reads `git.branch_prefix` (default `agent`), calls `decidePrOpenedReview`, and on a dispatch POSTs `agent-phase.yml` on the default branch. Inputs are `phase` and `runtime_phase` `code-review`, `issue_number`, `pr_number`, `head_ref`, `base_branch`, `pr_opened_review` `true`, `review_loop_active` `false`, and `chain_code_review` `false`. There is no `comment_id`. A silent skip posts no comment and dispatches nothing. `agent-phase.yml` defaults an omitted `base_branch` to `main` and sets `PR_OPENED_REVIEW` to `true` only when `pr_opened_review` is `true`. An empty `comment_id` publishes no reaction.
+Dogfood `agent-on-pr-opened.yml` calls `agent-pr-opened-review.yml` with `blacksmith-4vcpu-ubuntu-2404`. The gate reads `git.branch_prefix` (default `agent`), calls `decidePrOpenedReview`, and on a dispatch POSTs `agent-phase.yml` on the default branch. Inputs are `phase` and `runtime_phase` `code-review`, `issue_number`, `pr_number`, `head_ref`, `base_branch`, `pr_opened_review` `true`, `review_loop_active` `false`, and `chain_code_review` `false`. There is no `comment_id`. A silent skip posts no comment and dispatches nothing. `agent-phase.yml` defaults an omitted `base_branch` to `main` and forwards `pr_opened_review` into `agent-phase-run`, which sets `PR_OPENED_REVIEW` to `true` only when that input is `true`. Review fixes landed as `7f4ba7c`: a dispatched review still starts if the pull request closes, and only the full HTML comments count as marks. An empty `comment_id` publishes no reaction.
