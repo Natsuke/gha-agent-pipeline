@@ -25,6 +25,8 @@ export type RunCodeReviewPhaseOptions = {
  * Starts a code review. When `PR_OPENED_REVIEW=true`, the shared decision runs
  * on the live pull request and every existing review first. A silent skip
  * returns before `start`, so the phase posts no startup comment and calls no model.
+ * A pull request closed after dispatch still starts. A published PR-opened
+ * review mark still skips.
  */
 export async function runCodeReviewPhase(
   options: RunCodeReviewPhaseOptions,
@@ -57,9 +59,10 @@ async function decideLivePrOpenedReview(options: RunCodeReviewPhaseOptions) {
   return decidePrOpenedReview({
     // This job is workflow dispatch. The gate already accepted a reviewable
     // pull_request event, so the phase asks the same decision as ready_for_review
-    // against the live pull request and reviews.
+    // against the live pull request and reviews. Closed after that dispatch is
+    // not a skip; the once-only mark on an existing review still is.
     event: { action: "ready_for_review" },
-    pullRequest,
+    pullRequest: { ...pullRequest, state: "open" },
     reviews,
     branchPrefix,
   });

@@ -168,12 +168,55 @@ describe("decidePrOpenedReview", () => {
     ).toEqual({ outcome: "silent-skip" });
   });
 
+  it("does not treat a review body that only mentions agent-pr-opened-review as a silent skip", () => {
+    expect(
+      decide({
+        reviews: [
+          {
+            state: "COMMENTED",
+            body: "The notes mention agent-pr-opened-review without the HTML comment.",
+          },
+        ],
+      }),
+    ).toEqual({
+      outcome: "dispatch",
+      dispatch: {
+        issueNumber: 42,
+        prNumber: 88,
+        headRef: "agent/42-add-widget",
+        baseRef: "develop",
+        prOpenedReview: true,
+        reviewLoopActive: false,
+        chainCodeReview: false,
+      },
+    });
+  });
+
   it("treats an implement pull request as a silent skip", () => {
     expect(
       decide({
         body: "Closes #42\n\n<!-- agent-pr -->\n<!-- agent-pr-implement -->\n## Agent PR",
       }),
     ).toEqual({ outcome: "silent-skip" });
+  });
+
+  it("does not treat a pull request body that only mentions agent-pr-implement as a silent skip", () => {
+    expect(
+      decide({
+        body: "Closes #42\n\nThe notes mention agent-pr-implement without the HTML comment.",
+      }),
+    ).toEqual({
+      outcome: "dispatch",
+      dispatch: {
+        issueNumber: 42,
+        prNumber: 88,
+        headRef: "agent/42-add-widget",
+        baseRef: "develop",
+        prOpenedReview: true,
+        reviewLoopActive: false,
+        chainCodeReview: false,
+      },
+    });
   });
 
   it("does not treat path filters as a silent skip", () => {

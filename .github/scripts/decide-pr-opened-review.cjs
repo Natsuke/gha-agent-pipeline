@@ -40,17 +40,17 @@
  */
 
 /**
- * HTML comment token written on an implement pull request body.
- * A body that contains this token is a silent skip.
+ * HTML comment written on an implement pull request body.
+ * A body that contains this comment is a silent skip.
  */
-const IMPLEMENT_MARK = "agent-pr-implement";
+const IMPLEMENT_MARK = "<!-- agent-pr-implement -->";
 
 /**
- * HTML comment token written on a published PR-opened review.
- * Any existing review body that contains this token is a silent skip.
+ * HTML comment written on a published PR-opened review.
+ * Any existing review body that contains this comment is a silent skip.
  * This is not the `agent-pr-opened` comment mark.
  */
-const PR_OPENED_REVIEW_MARK = "agent-pr-opened-review";
+const PR_OPENED_REVIEW_MARK = "<!-- agent-pr-opened-review -->";
 
 function issueNumberFromHeadBranch(headRef, branchPrefix, prNumber) {
   const escapedPrefix = branchPrefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");

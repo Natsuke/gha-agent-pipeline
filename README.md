@@ -86,13 +86,13 @@ jobs:
           chain_code_review: ${{ inputs.chain_code_review }}
           review_loop_active: ${{ inputs.review_loop_active }}
           review_loop_round: ${{ inputs.review_loop_round }}
+          pr_opened_review: ${{ inputs.pr_opened_review }}
           node_version: "24"
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          PR_OPENED_REVIEW: ${{ inputs.pr_opened_review == 'true' && 'true' || '' }}
 ```
 
-Declare optional `comment_id` (empty publishes no reaction), optional `base_branch` (default `main` when a slash dispatch omits it), and optional `pr_opened_review` on the consumer `agent-phase.yml`. Forward `base_branch` as in the excerpt. Set `PR_OPENED_REVIEW` to the string `true` only when `pr_opened_review` is `true`; otherwise the phase stays an ordinary code review.
+Declare optional `comment_id` (empty publishes no reaction), optional `base_branch` (default `main` when a slash dispatch omits it), and optional `pr_opened_review` on the consumer `agent-phase.yml`. Forward `base_branch` and `pr_opened_review` as in the excerpt. The composite sets `PR_OPENED_REVIEW` to the string `true` only when that input is `true`. An omitted input stays an ordinary code review.
 
 A consumer opts in by listening for `pull_request` `opened` and `ready_for_review` and calling the reusable gate with a runner label. The gate does not set up Node and does not receive the model secret or the App private key. It reads `git.branch_prefix` from `.github/agent.config.yml` on the default branch (`agent` when that file is missing or unreadable), then dispatches the phase workflow above.
 

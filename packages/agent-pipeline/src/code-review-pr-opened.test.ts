@@ -203,6 +203,71 @@ describe("PR-opened review startup", () => {
     expect(started).toBe(false);
   });
 
+  it("starts a PR-opened review when the live pull request is closed and no review contains the PR-opened review mark", async () => {
+    vi.stubEnv("PR_OPENED_REVIEW", "true");
+    let started = false;
+    const octokit = {
+      pulls: {
+        get: async () => ({
+          data: { ...liveReviewablePullRequest(), state: "closed" },
+        }),
+      },
+      paginate: async () => [],
+    } as unknown as Octokit;
+
+    await runCodeReviewPhase({
+      octokit,
+      owner: "igloo",
+      repo: "gha-agent-pipeline",
+      prNumber: 88,
+      branchPrefix: "agent",
+      start: async () => {
+        started = true;
+      },
+    });
+
+    expect(started).toBe(true);
+  });
+
+  it("does not start a PR-opened review when the live pull request is closed and a review contains the PR-opened review mark", async () => {
+    vi.stubEnv("PR_OPENED_REVIEW", "true");
+    let started = false;
+    const octokit = {
+      pulls: {
+        get: async () => ({
+          data: { ...liveReviewablePullRequest(), state: "closed" },
+        }),
+        listReviews: async () => ({ data: [] }),
+      },
+      paginate: async () => [
+        {
+          id: 3,
+          state: "DISMISSED",
+          body: "<!-- agent-code-review -->\n<!-- agent-pr-opened-review -->\nWalkthrough",
+        },
+      ],
+      issues: {
+        createComment: async () => {
+          throw new Error("startup comment posted");
+        },
+      },
+    } as unknown as Octokit;
+
+    await runCodeReviewPhase({
+      octokit,
+      owner: "igloo",
+      repo: "gha-agent-pipeline",
+      prNumber: 88,
+      branchPrefix: "agent",
+      start: async () => {
+        started = true;
+        throw new Error("phase started");
+      },
+    });
+
+    expect(started).toBe(false);
+  });
+
   it("starts a PR-opened review when no review contains agent-pr-opened-review", async () => {
     vi.stubEnv("PR_OPENED_REVIEW", "true");
     let started = false;

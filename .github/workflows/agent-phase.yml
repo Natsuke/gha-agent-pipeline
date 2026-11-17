@@ -129,7 +129,7 @@ jobs:
           chain_code_review: ${{ inputs.chain_code_review }}
           review_loop_active: ${{ inputs.review_loop_active }}
           review_loop_round: ${{ inputs.review_loop_round }}
+          pr_opened_review: ${{ inputs.pr_opened_review }}
           node_version: "24"
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-          PR_OPENED_REVIEW: ${{ inputs.pr_opened_review == 'true' && 'true' || '' }}
