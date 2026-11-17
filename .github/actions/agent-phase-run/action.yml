@@ -31,8 +31,9 @@ inputs:
     required: false
     default: ""
   comment_id:
-    description: Comment or review ID that triggered the workflow.
-    required: true
+    description: Comment or review ID that triggered the workflow. An empty value publishes no reaction.
+    required: false
+    default: ""
   issue_number:
     description: Issue number this run targets.
     required: true
